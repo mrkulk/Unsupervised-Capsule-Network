@@ -4,10 +4,10 @@ Deep Capsule networks with a few variations. Originally proposed by Tieleman &am
 ### Description
 Given an input image, a convolutional neural network (encoder) predicts a set of structure variables corresponding to transformation matrices (total number ```T``` is pre-specified). Each matrix has 7 values of interest -- scale (x,y), translation (x,y), shear, rotation and intensity. A separate set of ```T``` weight matrices (NxN, N=10) are also learnt and they denote the entitiy or parts. These entities do not get an input, so they can be thought of as persistent memory units. Given the transformation matrix for each entity, the entity can be placed into the global image space by a bunch of matrix computations. The final image is produced by combining contributions (aggregator) from all the entities. This is the decoder (entities+transformation matrices+aggregator). The entire model can then be back-propagated end-to-end via gradient descent.  
 
-For example, here's the model on MNIST test (not ran until convergence). The total number of entities in the decoder was set to be 6 (usually run it for 10+). As seen below, 6 entities are sufficient to reconstruct and the encoder does the necessary deformations to use only the available number of entities.
+For example, here's the model on MNIST test (not ran until convergence). The total number of entities in the decoder was set to be 6 and 20 in two different experiments. As seen below, the encoder does the necessary deformations to use only the available number of entities.
 
-<!--![Alt text](https://github.com/mrkulk/Unsupervised-Capsule-Network/blob/master/capsule.png "")-->
-![alt-text-1](https://github.com/mrkulk/Unsupervised-Capsule-Network/blob/master/capsule_6.png "6 Entities in decoder" =250x) ![alt-text-2](https://github.com/mrkulk/Unsupervised-Capsule-Network/blob/master/capsule_20.png "20 Entities in decoder" =250x)
+![alt-text](https://github.com/mrkulk/Unsupervised-Capsule-Network/blob/master/capsule_6.png "6 Entities in decoder") 
+![alt-text](https://github.com/mrkulk/Unsupervised-Capsule-Network/blob/master/capsule_20.png "20 Entities in decoder")
 
 ### Requirements
 Other than normal torch dependencies (GPU required), please install the stn module from here: http://gitxiv.com/posts/5WTXTLuEA4Hd8W84G/spatial-transformer-networks
