@@ -5,11 +5,12 @@ Deep Capsule networks with a few variations. Originally proposed by Tieleman &am
 Given an input image, a convolutional neural network (encoder) predicts a set of structure variables corresponding to transformation matrices (total number ```T``` is pre-specified). Each matrix has 7 values of interest -- scale (x,y), translation (x,y), shear, rotation and intensity. A separate set of ```T``` weight matrices (NxN, N=10) are also learnt and they denote the entitiy or parts. These entities do not get an input, so they can be thought of as persistent memory units. Given the transformation matrix for each entity, the entity can be placed into the global image space by a bunch of matrix computations. The final image is produced by combining contributions (aggregator) from all the entities. This is the decoder (entities+transformation matrices+aggregator). The entire model can then be back-propagated end-to-end via gradient descent.  
 
 For example, here's the model on MNIST test (not ran until convergence). The total number of entities in the decoder was set to be 6 and 20 in two different experiments. As seen below, the encoder does the necessary deformations to use only the available number of entities.
-1. 6 Entities in decoder (left is original, middle columns are 6 transformed entities per image, right reconstruction)
+
+#### 6 Entities in decoder (left is original, middle columns are 6 transformed entities per image, right reconstruction)
 
 ![alt-text](https://github.com/mrkulk/Unsupervised-Capsule-Network/blob/master/capsule_6.png "6 Entities in decoder") 
 
-2. 20 Entities in decoder (left is original, middle columns are 20 transformed entities per image, right reconstruction)
+#### 20 Entities in decoder (left is original, middle columns are 20 transformed entities per image, right reconstruction)
 
 ![alt-text](https://github.com/mrkulk/Unsupervised-Capsule-Network/blob/master/capsule_20.png "20 Entities in decoder")
 
