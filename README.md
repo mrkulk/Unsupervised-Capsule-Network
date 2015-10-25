@@ -8,6 +8,7 @@ For example, here's the model on MNIST test (not ran until convergence). The tot
 
 #### 6 Entities in decoder (left is the original image, middle columns are the 6 transformed entities per image, right is the reconstructd image)
 Note: not ran until convergence
+
 ![alt-text](https://github.com/mrkulk/Unsupervised-Capsule-Network/blob/master/capsule_6.png "6 Entities in decoder") 
 
 #### 20 Entities in decoder (left is the original image, middle columns are the 20 transformed entities per image, right is the reconstructd image)
