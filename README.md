@@ -6,8 +6,8 @@ Given an input image, a convolutional neural network (encoder) predicts a set of
 
 For example, here's the model on MNIST test (not ran until convergence). The total number of entities in the decoder was set to be 6 and 20 in two different experiments. As seen below, the encoder does the necessary deformations to use only the available number of entities.
 
-#### 6 Entities in decoder [not ran until convergence] (left is the original image, middle columns are the 6 transformed entities per image, right is the reconstructd image) 
-
+#### 6 Entities in decoder (left is the original image, middle columns are the 6 transformed entities per image, right is the reconstructd image)
+Note: not ran until convergence
 ![alt-text](https://github.com/mrkulk/Unsupervised-Capsule-Network/blob/master/capsule_6.png "6 Entities in decoder") 
 
 #### 20 Entities in decoder (left is the original image, middle columns are the 20 transformed entities per image, right is the reconstructd image)
