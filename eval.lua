@@ -15,7 +15,7 @@ require 'sys'
 require 'pl'
 matio = require 'matio'
 
-src = 'logs/'
+src = '/home/tejas/Documents/MIT/SequenceRender/slurm_logs/sr__num_entities_20_lr_0.005/'--'logs/'
 
 plot = false
 -- params = torch.load(src .. '/params.t7')
