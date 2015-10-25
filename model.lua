@@ -99,9 +99,9 @@ function create_encoder(params)
 
   -- local imout = get_transformer(input_image, 0, enc, params, 0, 0) -- get_transformer(params, 0, 0)({input_image, enc})
 
-  local enc1_high = nn.SpatialMaxPooling(2,2)(nn.ReLU()(nn.SpatialConvolution(1, 64, 3, 3)(input_image)))
-  local enc2_high = nn.SpatialMaxPooling(2,2)(nn.ReLU()(nn.SpatialConvolution(64, 96, 3, 3)(enc1_high)))
-  local affines = nn.Linear(96*6*6,params.rnn_size)((nn.Reshape(96*6*6)(enc2_high)))
+  local enc1_high = nn.SpatialMaxPooling(2,2)(nn.ReLU()(nn.SpatialConvolution(1, 32, 3, 3)(input_image)))
+  local enc2_high = nn.SpatialMaxPooling(2,2)(nn.ReLU()(nn.SpatialConvolution(32, 64, 3, 3)(enc1_high)))
+  local affines = nn.Linear(64*6*6,params.rnn_size)((nn.Reshape(64*6*6)(enc2_high)))
 
   return nn.gModule({input_image}, {affines})
 end
@@ -117,10 +117,10 @@ function create_network(params)
 
   --- encoder ---
   local enc_params = create_encoder(params)({x})
-
-  if false then -- TODO: implement recurrent version to handle multiple digits
-    local rnn_i = {[0] = nn.Identity()(enc_params)}
-    local next_s = {}
+  local rnn_i, next_s
+  if true then -- TODO: implement recurrent version to handle multiple digits
+    rnn_i = {[0] = nn.Identity()(enc_params)}
+    next_s = {}
     local split = {prev_s:split(2 * params.layers)}
     for layer_idx = 1, params.layers do
       local prev_c         = split[2 * layer_idx - 1]
@@ -140,14 +140,7 @@ function create_network(params)
   local canvas = {}
   for i=1,params.num_entities do
     sts[i] = {}
-    local part;
-    if params.dataset == "omniglot" then
-      -- part = nn.Entity(bsize, template_width*template_width, 'rand')(x)
-      part = nn.ReLU()(nn.Entity(bsize, template_width*template_width, 'rand')(x))
-    else
-      part = nn.ReLU()(nn.Entity(bsize, template_width*template_width, 'rand')(x))
-    end
-    -- local part = nn.Log()(nn.AddConstant(1)(nn.Exp()(nn.Entity(bsize, template_width*template_width, 'rand')(x))))
+    local part = nn.ReLU()(nn.Entity(bsize, template_width*template_width, 'rand')(x))
 
     local part_fg = nn.Sigmoid()(nn.Entity(bsize, template_width*template_width,'rand')(x))--nn.Sigmoid()(nn.Linear(params.rnn_size, template_width*template_width)(rnn_i[params.layers]))
     -- local part_fg = nn.Sigmoid()(nn.Linear(params.rnn_size, template_width*template_width)(rnn_i[params.layers]))
@@ -225,7 +218,6 @@ end
 function fp(data)
   g_replace_table(model.s[0], model.start_s)
   reset_state()
-  local next_canvas
   for i = 1, params.seq_length do
     local x = data:clone()
     local s = model.s[i - 1]

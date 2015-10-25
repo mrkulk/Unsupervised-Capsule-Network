@@ -15,7 +15,7 @@ require 'sys'
 require 'pl'
 matio = require 'matio'
 
-src = 'slurm_logs/omni__num_entities_30_dataset_omniglot'
+src = 'logs/'
 
 plot = false
 -- params = torch.load(src .. '/params.t7')
@@ -62,18 +62,14 @@ function get_batch(t, data)
   local inputs = torch.Tensor(params.bsize,1,32,32)
   local targets = torch.Tensor(params.bsize)
   local k = 1
-  for i = t,math.min(t+params.bsize-1,data[1]:size()[1]) do
+
+  for i = t,math.min(t+params.bsize-1,data:size()) do
      -- load new sample
-     if params.dataset == "omniglot" then
-       inputs[{k,1,{},{}}] = data[1][i]:clone()
-       targets[k] = data[2][i]
-     else
-       local sample = data[i]
-       local input = sample[1]:clone()
-       local _,target = sample[2]:clone():max(1)
-       inputs[{k,1,{},{}}] = input
-       targets[k] = target[1]
-     end
+     local sample = data[i]
+     local input = sample[1]:clone()
+     local _,target = sample[2]:clone():max(1)
+     inputs[{k,1,{},{}}] = input
+     targets[k] = target[1]
      k = k + 1
   end
   inputs = inputs:cuda()
@@ -90,15 +86,9 @@ function init()
 end
 
 function run(data, mode)
-  if params.dataset == "omniglot" then
-    max_num = data[1]:size()[1]
-  else
-    max_num = data:size()
-  end
-  -- testing
-  -- for tt = 1,1 do--trainData:size(),params.bsize do
+  max_num = data:size()
   bid = 1
-  for tt = 1, max_num,params.bsize do
+  for tt = 1, 1 do --max_num,params.bsize do
     local inputs, targets = get_batch(tt, data)
     local test_perp, test_output = fp(inputs)
     local affines = {}
@@ -143,14 +133,14 @@ function run(data, mode)
   end
 end
 
-MAX_IMAGES_TO_DISPLAY = 30
-plot = false
+MAX_IMAGES_TO_DISPLAY = 20
+plot = true
 
 if plot then
   max_num = 1
 end
 init()
-run(trainData, 'train')
+-- run(trainData, 'train')
 run(testData, 'test')
 
 -- print(extract_node(model.rnns[1], 'entity_1').data.module.output[1][1])

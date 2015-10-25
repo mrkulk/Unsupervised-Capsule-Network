@@ -47,9 +47,9 @@ testLogger = optim.Logger(paths.concat(params.save .. '/', 'test.log'))
 trainData = mnist.loadTrainSet(nbTrainingPatches, geometry)
 trainData.data = trainData.data/255
 testData = mnist.loadTestSet(nbTestingPatches, geometry)
-fulldata = torch.zeros(trainData.data:size(1) + testData.data:size(1), 1, 32,32)
-fulldata[{{1,trainData.data:size(1)},{},{},{}}] = trainData.data:clone()
-fulldata[{{trainData.data:size(1)+1,testData.data:size(1)+trainData.data:size(1) },{},{},{}}] = testData.data:clone()
+testData.data = testData.data/255
+
+fulldata = trainData.data:clone()
 
 --------------------------- Helper functions ------------------------------
 
@@ -93,7 +93,7 @@ function train()
       bp(inputs)
       cutorch.synchronize()
       collectgarbage()  
-      
+
       if params.plot and math.fmod(cntr, 20) == 0  then 
         test()
       end
